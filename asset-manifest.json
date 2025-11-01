@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/madeofai/static/css/main.90bd7cf1.css",
-    "main.js": "/madeofai/static/js/main.f50172f4.js",
+    "main.js": "/madeofai/static/js/main.e4db95a0.js",
     "static/js/453.a2ae3637.chunk.js": "/madeofai/static/js/453.a2ae3637.chunk.js",
     "index.html": "/madeofai/index.html",
     "main.90bd7cf1.css.map": "/madeofai/static/css/main.90bd7cf1.css.map",
-    "main.f50172f4.js.map": "/madeofai/static/js/main.f50172f4.js.map",
+    "main.e4db95a0.js.map": "/madeofai/static/js/main.e4db95a0.js.map",
     "453.a2ae3637.chunk.js.map": "/madeofai/static/js/453.a2ae3637.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.90bd7cf1.css",
-    "static/js/main.f50172f4.js"
+    "static/js/main.e4db95a0.js"
   ]
 }
