@@ -8,44 +8,70 @@ function App() {
   const [term, setTerm] = useState("");
   const [words, setWords] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [viewMode, setViewMode] = useState("wordcloud"); // NEW
   const canvasRef = useRef(null);
 
-  // Fetch data from backend
+  // ---- Fetch Data ----
   const fetchData = async () => {
     if (!term) return;
+
     setLoading(true);
     try {
-      const response = await axios.get(`http://127.0.0.1:8000/analyze?term=${term}`);
+      const response = await axios.get(
+        `https://madeofai-backend.onrender.com/analyze?term=${term}`
+      );
+
       const counts = Array.isArray(response?.data?.data?.counts)
         ? response.data.data.counts
         : [];
-      const data = counts
-        .filter(item => Array.isArray(item) && item.length === 2)
-        .map(([text, value]) => ({ text: String(text), value: Number(value) }));
-      setWords(data);
+
+      const formatted = counts
+        .filter((item) => Array.isArray(item) && item.length === 2)
+        .map(([text, value]) => ({
+          text: String(text),
+          value: Number(value),
+        }));
+
+      setWords(formatted);
     } catch (err) {
       console.error("Fetch error:", err);
-      alert("Error fetching data. Make sure backend is running on port 8000.");
+      alert("Error fetching data from backend.");
     }
     setLoading(false);
   };
 
-  // Generate word cloud on data update
+  // ---- Generate Wordcloud ----
   useEffect(() => {
-    if (words.length > 0 && canvasRef.current) {
-      const formatted = words.map(w => [w.text, w.value]);
-      WordCloudLib(canvasRef.current, {
-        list: formatted,
-        gridSize: 8,
-        weightFactor: 4,
-        fontFamily: "Inter, sans-serif",
-        color: () => `hsl(${Math.random() * 360}, 40%, 30%)`,
-        rotateRatio: 0.2,
-        backgroundColor: "transparent",
-      });
+    if (viewMode === "wordcloud" || viewMode === "both") {
+      if (words.length > 0 && canvasRef.current) {
+        const formatted = words.map((w) => [w.text, w.value]);
+        WordCloudLib(canvasRef.current, {
+          list: formatted,
+          gridSize: 8,
+          weightFactor: 4,
+          fontFamily: "Inter, sans-serif",
+          color: () => `hsl(${Math.random() * 360}, 40%, 30%)`,
+          rotateRatio: 0.2,
+          backgroundColor: "transparent",
+        });
+      }
     }
-  }, [words]);
+  }, [words, viewMode]);
 
+  // ---- Bucket Logic (for list view) ----
+  const bucketWords = () => {
+    const sorted = [...words].map((w) => w.text);
+    return {
+      veryCommon: sorted.slice(0, 10),
+      common: sorted.slice(10, 20),
+      occasional: sorted.slice(20, 35),
+      rare: sorted.slice(35, 60),
+    };
+  };
+
+  const buckets = bucketWords();
+
+  // ---- UI ----
   return (
     <div style={styles.page}>
       <div style={styles.container}>
@@ -56,6 +82,7 @@ function App() {
           Reddit in one glance — type any topic and see what people say most.
         </p>
 
+        {/* ---- Input Row ---- */}
         <div style={styles.inputRow}>
           <input
             type="text"
@@ -69,29 +96,77 @@ function App() {
           </button>
         </div>
 
-        <div style={styles.wordCloud}>
-          {Array.isArray(words) && words.length > 0 ? (
-            <canvas
-              ref={canvasRef}
-              width={800}
-              height={500}
-              style={{
-                width: "100%",
-                height: "100%",
-                display: "block",
-                margin: "0 auto",
-              }}
-            />
-          ) : (
-            <p style={styles.placeholder}>
-              Your word cloud will appear here.
-            </p>
-          )}
+        {/* ---- View Mode Selector ---- */}
+        <div style={{ marginBottom: "1.5rem" }}>
+          <select
+            style={styles.dropdown}
+            value={viewMode}
+            onChange={(e) => setViewMode(e.target.value)}
+          >
+            <option value="wordcloud">Wordcloud</option>
+            <option value="list">List View</option>
+            <option value="both">Both</option>
+          </select>
         </div>
+
+        {/* ---- DISPLAY AREA ---- */}
+
+        {/* WORDCLOUD MODE */}
+        {(viewMode === "wordcloud" || viewMode === "both") && (
+          <div style={styles.wordCloud}>
+            {Array.isArray(words) && words.length > 0 ? (
+              <canvas
+                ref={canvasRef}
+                width={800}
+                height={500}
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  display: "block",
+                  margin: "0 auto",
+                }}
+              />
+            ) : (
+              <p style={styles.placeholder}>
+                Your results will appear here.
+              </p>
+            )}
+          </div>
+        )}
+
+        {/* LIST MODE */}
+        {(viewMode === "list" || viewMode === "both") && (
+          <div style={styles.listContainer}>
+            <WordList title="Very Common" items={buckets.veryCommon} />
+            <WordList title="Common" items={buckets.common} />
+            <WordList title="Occasional" items={buckets.occasional} />
+            <WordList title="Rare Mentions" items={buckets.rare} />
+          </div>
+        )}
       </div>
     </div>
   );
 }
+
+/* ------- LIST COMPONENT ------- */
+function WordList({ title, items }) {
+  if (!items || items.length === 0) return null;
+
+  return (
+    <div style={styles.listBlock}>
+      <h3 style={styles.listTitle}>{title}</h3>
+      <ul style={styles.list}>
+        {items.map((w, i) => (
+          <li key={i} style={styles.listItem}>
+            {w}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+/* ------- STYLES ------- */
 
 const styles = {
   page: {
@@ -101,13 +176,14 @@ const styles = {
     justifyContent: "center",
     alignItems: "center",
     fontFamily: "Inter, sans-serif",
+    padding: "2rem",
   },
   container: {
     background: "rgba(255, 255, 255, 0.6)",
     backdropFilter: "blur(10px)",
     borderRadius: "20px",
-    boxShadow: "0 8px 24px rgba(0,0,0,0.1)",
-    width: "80%",
+    boxShadow: "0 8px 24px rgba(0,0,0,0.08)",
+    width: "90%",
     maxWidth: "900px",
     padding: "3rem",
     textAlign: "center",
@@ -148,17 +224,40 @@ const styles = {
     padding: "0.75rem 1.5rem",
     fontWeight: "600",
     cursor: "pointer",
-    transition: "background 0.3s",
+  },
+  dropdown: {
+    padding: "0.6rem 1rem",
+    borderRadius: "10px",
+    border: "1px solid #cbd5e1",
+    fontSize: "1rem",
   },
   wordCloud: {
     height: 500,
     width: "100%",
-    margin: "0 auto",
+    marginBottom: "2rem",
   },
   placeholder: {
     color: "#94a3b8",
     fontStyle: "italic",
+  },
+  listContainer: {
     marginTop: "2rem",
+    textAlign: "left",
+  },
+  listBlock: {
+    marginBottom: "1.5rem",
+  },
+  listTitle: {
+    color: "#1e293b",
+    marginBottom: "0.5rem",
+  },
+  list: {
+    listStyle: "none",
+    paddingLeft: 0,
+  },
+  listItem: {
+    padding: "3px 0",
+    color: "#334155",
   },
 };
 
