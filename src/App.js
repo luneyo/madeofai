@@ -76,10 +76,10 @@ function App() {
     <div style={styles.page}>
       <div style={styles.container}>
         <h1 style={styles.title}>
-          madeof<span style={styles.accent}>AI</span>
+          RedditReader
         </h1>
         <p style={styles.subtitle}>
-          Reddit in one glance — type any topic and see what people say most.
+          Scan Reddit for keywords. Use it to boost SEO or see what people are talking about.
         </p>
 
         {/* ---- Input Row ---- */}
