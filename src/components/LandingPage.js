@@ -30,11 +30,11 @@ const LandingPage = () => {
                     </div>
 
                     <h1 className="hero-title">
-                        Building digital products, brands, and experience.
+                        Hi, I'm Saheel. I've built digital products for you content kings & queens.
                     </h1>
 
                     <Link to="/app" className="cta-btn">
-                        Latest Shots <ArrowRight size={16} />
+                        Check em out<ArrowRight size={16} />
                     </Link>
                 </div>
             </div>
@@ -42,12 +42,9 @@ const LandingPage = () => {
             {/* Logos Section - mimicking the strip */}
             <div className="section-card" style={{ padding: '2rem', borderRadius: '30px' }}>
                 <div className="logos-section">
-                    <span className="logo-item">NATIONAL BANK</span>
-                    <span className="logo-item">mattered</span>
-                    <span className="logo-item">Coca-Cola</span>
-                    <span className="logo-item">Adobe</span>
-                    <span className="logo-item">SUBWAY</span>
-                    <span className="logo-item">codecademy</span>
+                    <span className="logo-item">RedditReader</span>
+                    <span className="logo-item">Blawger</span>
+                    <span className="logo-item">Neighbourhood</span>
                 </div>
             </div>
 
