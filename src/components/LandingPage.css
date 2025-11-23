@@ -1,0 +1,194 @@
+/* LandingPage.css */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+
+.landing-page {
+    font-family: 'Inter', sans-serif;
+    background-color: #e5e5e5;
+    /* Light gray background from image */
+    min-height: 100vh;
+    padding: 2rem;
+    color: #1a1a1a;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+/* --- Sections Container (The rounded cards) --- */
+.section-card {
+    background-color: #f3f4f6;
+    /* Slightly lighter gray/white for cards */
+    border-radius: 40px;
+    padding: 4rem 2rem;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.section-card.hero {
+    padding-top: 2rem;
+    min-height: 80vh;
+    justify-content: center;
+}
+
+.section-card.footer {
+    padding: 6rem 2rem;
+}
+
+/* --- Header --- */
+.header-nav {
+    position: absolute;
+    top: 2rem;
+    left: 2rem;
+    right: 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.header-left {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.pill-btn {
+    background: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    transition: transform 0.2s;
+}
+
+.pill-btn:hover {
+    transform: scale(1.05);
+}
+
+.header-right {
+    display: flex;
+    gap: 1rem;
+}
+
+/* --- Hero Content --- */
+.hero-content {
+    max-width: 800px;
+    margin-top: 2rem;
+}
+
+.profile-img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background-color: #ddd;
+    margin-bottom: 2rem;
+    object-fit: cover;
+}
+
+.hero-title {
+    font-size: 4rem;
+    font-weight: 500;
+    line-height: 1.1;
+    margin-bottom: 2rem;
+    letter-spacing: -0.02em;
+}
+
+.cta-btn {
+    background-color: #1a1a1a;
+    color: white;
+    padding: 1rem 2rem;
+    border-radius: 30px;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: transform 0.2s;
+    text-decoration: none;
+}
+
+.cta-btn:hover {
+    transform: scale(1.05);
+}
+
+/* --- Logos Section --- */
+.logos-section {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    padding: 3rem 0;
+    flex-wrap: wrap;
+    opacity: 0.6;
+    filter: grayscale(100%);
+}
+
+.logo-item {
+    font-weight: 700;
+    font-size: 1.2rem;
+}
+
+/* --- Services Section --- */
+.services-title {
+    font-size: 2rem;
+    font-weight: 500;
+    margin-bottom: 4rem;
+    max-width: 600px;
+}
+
+.services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+    width: 100%;
+    max-width: 1200px;
+    text-align: left;
+}
+
+.service-item {
+    padding: 1rem;
+}
+
+.service-icon {
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+}
+
+.service-name {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.service-desc {
+    font-size: 0.9rem;
+    color: #666;
+    line-height: 1.5;
+}
+
+/* --- Footer Section --- */
+.footer-title {
+    font-size: 2.5rem;
+    font-weight: 500;
+    margin-bottom: 2rem;
+}
+
+.footer-actions {
+    display: flex;
+    gap: 1rem;
+}
+
+.footer-bottom {
+    position: absolute;
+    bottom: 2rem;
+    left: 2rem;
+    right: 2rem;
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    color: #999;
+}
