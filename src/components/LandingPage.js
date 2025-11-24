@@ -30,7 +30,7 @@ const LandingPage = () => {
                     </div>
 
                     <h1 className="hero-title">
-                        Two incredible tools for your content.
+                        Two incredible tools for content writing.
                     </h1>
 
                     <Link to="/app" className="cta-btn">
