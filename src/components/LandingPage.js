@@ -30,28 +30,22 @@ const LandingPage = () => {
                     </div>
 
                     <h1 className="hero-title">
-                        Hi, I'm Saheel. I've built digital products for you content kings & queens.
+                        Two incredible tools for your content.
                     </h1>
 
                     <Link to="/app" className="cta-btn">
-                        Check em out<ArrowRight size={16} />
+                        RedditReader<ArrowRight size={16} />
                     </Link>
-                </div>
-            </div>
-
-            {/* Logos Section - mimicking the strip */}
-            <div className="section-card" style={{ padding: '2rem', borderRadius: '30px' }}>
-                <div className="logos-section">
-                    <span className="logo-item">RedditReader</span>
-                    <span className="logo-item">Blawger</span>
-                    <span className="logo-item">Neighbourhood</span>
+                    <Link to="/app" className="cta-btn">
+                        Blawger<ArrowRight size={16} />
+                    </Link>
                 </div>
             </div>
 
             {/* Services Section */}
             <div className="section-card">
                 <h2 className="services-title">
-                    Collaborate with brands and agencies to create impactful results.
+                    Blogs. SEO. AI. Everything you need.
                 </h2>
 
                 <div className="services-grid">
