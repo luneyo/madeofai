@@ -12,6 +12,22 @@ function MainApp() {
     const [viewMode, setViewMode] = useState("list");
     const [hasSearched, setHasSearched] = useState(false);
 
+    // ---- Mock Data for Local Dev ----
+    const MOCK_DATA = [
+        { text: "AI", value: 45 },
+        { text: "Future", value: 38 },
+        { text: "Technology", value: 32 },
+        { text: "Innovation", value: 28 },
+        { text: "Data", value: 25 },
+        { text: "Machine Learning", value: 22 },
+        { text: "Python", value: 20 },
+        { text: "React", value: 18 },
+        { text: "Coding", value: 15 },
+        { text: "Web", value: 12 },
+        { text: "Design", value: 10 },
+        { text: "Startup", value: 8 },
+    ];
+
     // ---- Fetch Data ----
     const fetchData = async (e) => {
         if (e) e.preventDefault();
@@ -39,7 +55,14 @@ function MainApp() {
             setWords(formatted);
         } catch (err) {
             console.error("Fetch error:", err);
-            alert("Error fetching data from backend.");
+
+            // Fallback to mock data if in development
+            if (process.env.NODE_ENV === 'development') {
+                console.log("Using MOCK DATA for local development");
+                setWords(MOCK_DATA);
+            } else {
+                alert("Error fetching data from backend.");
+            }
         }
         setLoading(false);
     };

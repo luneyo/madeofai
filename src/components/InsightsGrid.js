@@ -141,9 +141,10 @@ const InsightsGrid = ({ words }) => {
                         {!isUnlocked && (
                             <div style={{
                                 position: 'absolute',
-                                inset: -10, // Extend slightly to cover gaps if needed, or just 0
+                                inset: 0, // Cover exactly
                                 background: 'rgba(255, 255, 255, 0.1)', // More transparent
                                 backdropFilter: 'blur(0px)', // The cards themselves are blurred
+                                borderRadius: '24px', // Match container border radius
                                 display: 'flex',
                                 flexDirection: 'column',
                                 alignItems: 'center',
