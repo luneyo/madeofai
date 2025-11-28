@@ -1,16 +1,16 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { HashRouter, Routes, Route } from "react-router-dom";
 import LandingPage from "./components/LandingPage";
 import MainApp from "./components/MainApp";
 
 function App() {
   return (
-    <Router>
+    <HashRouter>
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/app" element={<MainApp />} />
       </Routes>
-    </Router>
+    </HashRouter>
   );
 }
 

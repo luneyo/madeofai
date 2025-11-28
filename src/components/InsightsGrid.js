@@ -26,7 +26,9 @@ const InsightsGrid = ({ words }) => {
     // Sort by value desc
     const sorted = [...words].sort((a, b) => b.value - a.value);
 
-    const top3 = sorted.slice(0, 3);
+    const top1 = sorted[0];
+    const top2 = sorted[1];
+    const top3 = sorted[2];
     const rest = sorted.slice(3);
 
     const getRankIcon = (index) => {
@@ -50,134 +52,141 @@ const InsightsGrid = ({ words }) => {
         }
     };
 
+    const RankCard = ({ word, index, blur }) => (
+        <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: index * 0.1 }}
+            style={{
+                background: getRankColor(index),
+                padding: '2rem',
+                borderRadius: '24px',
+                boxShadow: '0 10px 30px -5px rgba(0,0,0,0.1)',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                position: 'relative',
+                overflow: 'hidden',
+                border: '1px solid rgba(255,255,255,0.5)',
+                minHeight: '200px',
+                flex: '1 1 250px',
+                filter: blur ? 'blur(10px)' : 'none',
+                transition: 'filter 0.3s',
+            }}
+        >
+            <div style={{
+                position: 'absolute',
+                top: '1rem',
+                right: '1rem',
+                background: 'rgba(255,255,255,0.5)',
+                padding: '0.5rem',
+                borderRadius: '50%'
+            }}>
+                {getRankIcon(index)}
+            </div>
+
+            <h2 style={{
+                fontSize: '2.5rem',
+                fontWeight: 800,
+                color: '#1e293b',
+                margin: '0 0 0.5rem 0',
+                textAlign: 'center',
+                lineHeight: 1.1
+            }}>
+                {word.text}
+            </h2>
+            <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                color: '#64748b',
+                fontWeight: 600
+            }}>
+                <TrendingUp size={16} />
+                <span>{word.value} mentions</span>
+            </div>
+        </motion.div>
+    );
+
     return (
         <div style={{ width: '100%', maxWidth: '1000px', margin: '0 auto' }}>
 
-            {/* Top 3 Hero Cards */}
+            {/* Top 3 Section */}
             <div style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+                display: 'flex',
+                flexWrap: 'wrap',
                 gap: '1.5rem',
-                marginBottom: '3rem'
+                marginBottom: '3rem',
+                justifyContent: 'center'
             }}>
-                {top3.map((w, i) => {
-                    const isLocked = !isUnlocked && (i === 1 || i === 2);
+                {/* 1st Place */}
+                <RankCard word={top1} index={0} />
 
-                    return (
-                        <motion.div
-                            key={w.text}
-                            initial={{ opacity: 0, scale: 0.9 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            transition={{ delay: i * 0.1 }}
-                            style={{
-                                background: getRankColor(i),
-                                padding: '2rem',
-                                borderRadius: '24px',
-                                boxShadow: '0 10px 30px -5px rgba(0,0,0,0.1)',
+                {/* 2nd & 3rd Place Group */}
+                {(top2 || top3) && (
+                    <div style={{
+                        display: 'flex',
+                        flexWrap: 'wrap',
+                        gap: '1.5rem',
+                        flex: '2 1 500px',
+                        position: 'relative',
+                        borderRadius: '24px',
+                        // We need to ensure the overlay covers this entire area
+                    }}>
+                        {top2 && <RankCard word={top2} index={1} blur={!isUnlocked} />}
+                        {top3 && <RankCard word={top3} index={2} blur={!isUnlocked} />}
+
+                        {/* Paywall Overlay */}
+                        {!isUnlocked && (
+                            <div style={{
+                                position: 'absolute',
+                                inset: -10, // Extend slightly to cover gaps if needed, or just 0
+                                background: 'rgba(255, 255, 255, 0.1)', // More transparent
+                                backdropFilter: 'blur(0px)', // The cards themselves are blurred
                                 display: 'flex',
                                 flexDirection: 'column',
                                 alignItems: 'center',
                                 justifyContent: 'center',
-                                position: 'relative',
-                                overflow: 'hidden',
-                                border: '1px solid rgba(255,255,255,0.5)',
-                                minHeight: '200px'
-                            }}
-                        >
-                            {/* Content (Blurred if locked) */}
-                            <div style={{
-                                filter: isLocked ? 'blur(10px)' : 'none',
-                                transition: 'filter 0.3s',
-                                width: '100%',
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'center'
+                                padding: '1.5rem',
+                                textAlign: 'center',
+                                zIndex: 10
                             }}>
                                 <div style={{
-                                    position: 'absolute',
-                                    top: '1rem',
-                                    right: '1rem',
-                                    background: 'rgba(255,255,255,0.5)',
-                                    padding: '0.5rem',
-                                    borderRadius: '50%'
-                                }}>
-                                    {getRankIcon(i)}
-                                </div>
-
-                                <h2 style={{
-                                    fontSize: '2.5rem',
-                                    fontWeight: 800,
-                                    color: '#1e293b',
-                                    margin: '0 0 0.5rem 0',
-                                    textAlign: 'center',
-                                    lineHeight: 1.1
-                                }}>
-                                    {w.text}
-                                </h2>
-                                <div style={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: '0.5rem',
-                                    color: '#64748b',
-                                    fontWeight: 600
-                                }}>
-                                    <TrendingUp size={16} />
-                                    <span>{w.value} mentions</span>
-                                </div>
-                            </div>
-
-                            {/* Paywall Overlay */}
-                            {isLocked && (
-                                <div style={{
-                                    position: 'absolute',
-                                    inset: 0,
-                                    background: 'rgba(255, 255, 255, 0.3)',
-                                    backdropFilter: 'blur(0px)',
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
+                                    background: 'rgba(255,255,255,0.95)',
                                     padding: '1.5rem',
-                                    textAlign: 'center',
-                                    zIndex: 10
+                                    borderRadius: '20px',
+                                    boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01)',
+                                    maxWidth: '380px',
+                                    width: '100%'
                                 }}>
-                                    {/* Mentions Teaser Badge */}
-                                    <div style={{
-                                        background: 'rgba(255,255,255,0.95)',
-                                        padding: '0.3rem 0.6rem',
-                                        borderRadius: '8px',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        gap: '0.4rem',
-                                        boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-                                        fontSize: '0.8rem',
-                                        fontWeight: '700',
-                                        color: '#0f172a',
-                                        marginBottom: '1rem'
-                                    }}>
-                                        <TrendingUp size={14} color="#2563eb" />
-                                        <span>{w.value}</span>
+                                    <div style={{ marginBottom: '0.5rem', display: 'flex', justifyContent: 'center' }}>
+                                        <Lock size={24} color="#2563eb" />
                                     </div>
+                                    <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: '#0f172a', marginBottom: '0.25rem' }}>
+                                        Unlock Full Insights
+                                    </h3>
                                     <p style={{
                                         fontSize: '0.9rem',
-                                        fontWeight: 600,
-                                        color: '#1e293b',
-                                        marginBottom: '1rem'
+                                        color: '#64748b',
+                                        marginBottom: '1rem',
+                                        lineHeight: 1.4
                                     }}>
-                                        Subscribe to our tech newsletter to unlock all sections
+                                        Enter your email to reveal the 2nd and 3rd top trending keywords.
                                     </p>
                                     <form onSubmit={handleUnlock} style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                                         <input
                                             type="email"
-                                            placeholder="Enter email..."
+                                            placeholder="name@example.com"
                                             value={email}
                                             onChange={(e) => setEmail(e.target.value)}
                                             style={{
                                                 width: '100%',
-                                                padding: '0.5rem',
-                                                borderRadius: '8px',
+                                                padding: '0.6rem',
+                                                borderRadius: '10px',
                                                 border: '1px solid #cbd5e1',
-                                                fontSize: '0.9rem'
+                                                fontSize: '0.95rem',
+                                                outline: 'none'
                                             }}
                                             required
                                         />
@@ -187,21 +196,22 @@ const InsightsGrid = ({ words }) => {
                                                 background: '#0f172a',
                                                 color: 'white',
                                                 border: 'none',
-                                                padding: '0.5rem',
-                                                borderRadius: '8px',
+                                                padding: '0.6rem',
+                                                borderRadius: '10px',
                                                 fontWeight: 600,
                                                 cursor: 'pointer',
-                                                fontSize: '0.9rem'
+                                                fontSize: '0.95rem',
+                                                transition: 'background 0.2s'
                                             }}
                                         >
-                                            Unlock
+                                            Unlock Insights
                                         </button>
                                     </form>
                                 </div>
-                            )}
-                        </motion.div>
-                    );
-                })}
+                            </div>
+                        )}
+                    </div>
+                )}
             </div>
 
             {/* Remaining Chips Grid */}

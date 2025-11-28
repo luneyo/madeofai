@@ -9,7 +9,7 @@ function MainApp() {
     const [term, setTerm] = useState("");
     const [words, setWords] = useState([]);
     const [loading, setLoading] = useState(false);
-    const [viewMode, setViewMode] = useState("wordcloud");
+    const [viewMode, setViewMode] = useState("list");
     const [hasSearched, setHasSearched] = useState(false);
 
     // ---- Fetch Data ----
@@ -20,8 +20,9 @@ function MainApp() {
         setLoading(true);
         setHasSearched(true);
         try {
+            const apiUrl = process.env.REACT_APP_API_URL || "https://madeofai-backend.onrender.com";
             const response = await axios.get(
-                `https://madeofai-backend.onrender.com/analyze?term=${term}`
+                `${apiUrl}/analyze?term=${term}`
             );
 
             const counts = Array.isArray(response?.data?.data?.counts)
